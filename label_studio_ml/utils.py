@@ -143,6 +143,13 @@ def is_valid_url(path):
 
 
 def is_preload_needed(url):
+    # Get the subpath from environment variable, defaulting to empty string
+    subpath = get_env('LABEL_STUDIO_BASE_PATH', '').rstrip('/')
+    
+    # Handle subpath-prefixed URLs if subpath is configured
+    if subpath and url.startswith(f'{subpath}/'):
+        url = url[len(subpath):]
+    
     if url.startswith('upload') or url.startswith('/upload'):
         url = '/data' + ('' if url.startswith('/') else '/') + url
 
